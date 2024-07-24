@@ -1,9 +1,10 @@
 import PyPDF2
 import random
 import re
+from pathlib import Path
 
 # Path to the PDF file in Google Drive
-pdf_path = '/content/drive/My Drive/Certamen_Sets/SampleSet.pdf'
+pdf_path = Path(__file__).with_name('SampleSet.pdf')
 
 def extract_text_from_pdf(pdf_path):
     pdf_reader = PyPDF2.PdfReader(open(pdf_path, 'rb'))
