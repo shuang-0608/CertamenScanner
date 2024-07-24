@@ -63,6 +63,7 @@ def quizbowl_session(problems):
 
 # Extract text from PDF
 pdf_text = extract_text_from_pdf(pdf_path)
+print(pdf_text)
 
 # Parse Quizbowl problems
 quizbowl_problems = parse_quizbowl_problems(pdf_text)
