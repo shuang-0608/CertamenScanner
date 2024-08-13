@@ -1,4 +1,4 @@
-import PyPDF2
+import pdfminer
 import random
 import re
 from pathlib import Path
@@ -14,29 +14,43 @@ def extract_text_from_pdf(pdf_path):
     return text
 
 def parse_quizbowl_problems(text):
-    problems = re.split(r'\d+:\s', text)[1:]  # Split and remove the first empty part
-    formatted_problems = []
-    for problem in problems:
-        toss_up_match = re.search(r'^(.*?)\nB1:', problem, re.DOTALL)
-        bonus1_match = re.search(r'B1:\s(.*?)\nB2:', problem, re.DOTALL)
-        bonus2_match = re.search(r'B2:\s(.*?)(?:\n|$)', problem, re.DOTALL)
+    words = text.split('\n')
+    print(re.search('10.',text))
+    r = re.compile('[0-2][0-9]([.:])')
+    newlist = list(filter(r.match, words)) # Read Note below
+    return newlist
+    
 
-        if toss_up_match and bonus1_match and bonus2_match:
-            toss_up = toss_up_match.group(1)
-            bonus1 = bonus1_match.group(1)
-            bonus2 = bonus2_match.group(1)
+    
+    
+    # for word in words:
 
-            # Remove answers in uppercase
-            toss_up = re.sub(r'\b[A-Z]+\b', '', toss_up)
-            bonus1 = re.sub(r'\b[A-Z]+\b', '', bonus1)
-            bonus2 = re.sub(r'\b[A-Z]+\b', '', bonus2)
 
-            formatted_problems.append({
-                'toss_up': toss_up.strip(),
-                'bonus1': bonus1.strip(),
-                'bonus2': bonus2.strip()
-            })
-    return formatted_problems
+# def parse_quizbowl_problems(text):
+#     problems = re.split(r'\d+:\s', text)[1:]  # Split and remove the first empty part
+#     formatted_problems = []
+#     for problem in problems:
+#         toss_up_match = re.search(r'(.*?)\nB1:', problem, re.DOTALL)
+#         bonus1_match = re.search(r'B1:\s(.*?)\nB2:', problem, re.DOTALL)
+#         bonus2_match = re.search(r'B2:\s(.*?)(?:\n|$)', problem, re.DOTALL)
+#         print(toss_up_match)
+
+#         if toss_up_match and bonus1_match and bonus2_match:
+#             toss_up = toss_up_match.group(1)
+#             bonus1 = bonus1_match.group(1)
+#             bonus2 = bonus2_match.group(1)
+
+#             # Remove answers in uppercase
+#             toss_up = re.sub(r'\b[A-Z]+\b', '', toss_up)
+#             bonus1 = re.sub(r'\b[A-Z]+\b', '', bonus1)
+#             bonus2 = re.sub(r'\b[A-Z]+\b', '', bonus2)
+
+#             formatted_problems.append({
+#                 'toss_up': toss_up.strip(),
+#                 'bonus1': bonus1.strip(),
+#                 'bonus2': bonus2.strip()
+#             })
+#     return formatted_problems
 
 def quizbowl_session(problems):
     problem = random.choice(problems)
@@ -67,6 +81,7 @@ print(pdf_text)
 
 # Parse Quizbowl problems
 quizbowl_problems = parse_quizbowl_problems(pdf_text)
+print(quizbowl_problems)
 
 # Start a Quizbowl session
-quizbowl_session(quizbowl_problems)
+# quizbowl_session(quizbowl_problems)
